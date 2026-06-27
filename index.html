@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Engineered Systems — Infrastructure & Software Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0E14;
+    --bg-2:#0D131B;
+    --surface:#111922;
+    --surface-2:#152030;
+    --line:#1B2733;
+    --line-bright:#2A3A4B;
+    --text:#E7EDF3;
+    --muted:#8B97A6;
+    --faint:#586574;
+    --cyan:#46D6C5;
+    --cyan-dim:rgba(70,214,197,0.10);
+    --cyan-line:rgba(70,214,197,0.28);
+    --amber:#F0B45C;
+    --amber-dim:rgba(240,180,92,0.12);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Inter',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --max:1120px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  /* faint console grid */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;
+    opacity:0.16;
+    pointer-events:none;
+    z-index:0;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 80%);
+  }
+
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px;position:relative;z-index:1;}
+
+  a{color:inherit;text-decoration:none;}
+
+  .mono{font-family:var(--mono);}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--cyan);
+  }
+
+  /* ---------- top bar ---------- */
+  header.bar{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(10,14,20,0.72);
+    border-bottom:1px solid var(--line);
+  }
+  .bar-inner{
+    max-width:var(--max);margin:0 auto;padding:16px 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--mono);font-size:13px;letter-spacing:0.12em;color:var(--text);}
+  .pulse{
+    width:9px;height:9px;border-radius:50%;background:var(--cyan);
+    box-shadow:0 0 0 0 var(--cyan-line);
+    animation:pulse 2.6s infinite;
+    flex:0 0 auto;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(70,214,197,0.45);}
+    70%{box-shadow:0 0 0 9px rgba(70,214,197,0);}
+    100%{box-shadow:0 0 0 0 rgba(70,214,197,0);}
+  }
+  @media (prefers-reduced-motion:reduce){.pulse{animation:none;}}
+  .brand b{font-weight:600;}
+  .brand span{color:var(--faint);}
+  nav.links{display:flex;gap:26px;font-family:var(--mono);font-size:12.5px;letter-spacing:0.06em;color:var(--muted);}
+  nav.links a{transition:color .2s;}
+  nav.links a:hover{color:var(--cyan);}
+  @media (max-width:680px){nav.links{display:none;}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:104px 0 72px;position:relative;}
+  .hero .eyebrow{margin-bottom:26px;display:inline-block;}
+  .hero h1{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(38px,6.4vw,76px);
+    line-height:1.03;
+    letter-spacing:-0.02em;
+    max-width:18ch;
+  }
+  .hero h1 .em{color:var(--cyan);}
+  .hero p.lede{
+    margin-top:28px;
+    font-size:clamp(16px,2vw,19px);
+    color:var(--muted);
+    max-width:60ch;
+    line-height:1.65;
+  }
+  .hero-cta{margin-top:38px;display:flex;flex-wrap:wrap;gap:14px;}
+  .btn{
+    font-family:var(--mono);font-size:13px;letter-spacing:0.04em;
+    padding:13px 22px;border-radius:2px;border:1px solid var(--line-bright);
+    color:var(--text);transition:all .2s;display:inline-flex;align-items:center;gap:9px;
+  }
+  .btn .arrow{color:var(--cyan);transition:transform .2s;}
+  .btn:hover{border-color:var(--cyan);background:var(--cyan-dim);}
+  .btn:hover .arrow{transform:translateX(3px);}
+  .btn.solid{background:var(--cyan);color:#04130F;border-color:var(--cyan);font-weight:600;}
+  .btn.solid .arrow{color:#04130F;}
+  .btn.solid:hover{filter:brightness(1.08);background:var(--cyan);}
+  .btn:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
+
+  /* telemetry strip */
+  .telemetry{
+    margin-top:64px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:linear-gradient(180deg,var(--bg-2),rgba(13,19,27,0.4));
+    display:grid;grid-template-columns:repeat(4,1fr);
+    overflow:hidden;
+  }
+  .telemetry .cell{
+    padding:18px 22px;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;gap:5px;
+  }
+  .telemetry .cell:last-child{border-right:none;}
+  .telemetry .k{font-family:var(--mono);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);}
+  .telemetry .v{font-family:var(--display);font-size:23px;font-weight:600;color:var(--text);}
+  .telemetry .v .dot{color:var(--cyan);font-size:15px;}
+  @media (max-width:680px){
+    .telemetry{grid-template-columns:repeat(2,1fr);}
+    .telemetry .cell:nth-child(2){border-right:none;}
+  }
+
+  /* ---------- section frame ---------- */
+  section{padding:84px 0;position:relative;}
+  .sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:14px;flex-wrap:wrap;}
+  .sec-head .num{font-family:var(--mono);font-size:13px;color:var(--cyan);letter-spacing:0.1em;}
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(27px,3.6vw,40px);letter-spacing:-0.01em;}
+  .sec-sub{color:var(--muted);max-width:64ch;margin-bottom:0;font-size:15.5px;}
+
+  /* ---------- stack ---------- */
+  .stack{margin-top:52px;position:relative;}
+  .layer-group{margin-bottom:30px;position:relative;}
+  .layer-label{
+    display:flex;align-items:center;gap:14px;margin-bottom:18px;
+  }
+  .layer-label .tag{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--muted);padding:5px 11px;border:1px solid var(--line-bright);border-radius:2px;
+    background:var(--surface);white-space:nowrap;
+  }
+  .layer-label .rule{height:1px;background:linear-gradient(90deg,var(--line-bright),transparent);flex:1;}
+  .layer-label .lnum{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:0.1em;}
+
+  .cards{display:grid;gap:16px;}
+  .grid-2{grid-template-columns:1fr 1fr;}
+  @media (max-width:760px){.grid-2{grid-template-columns:1fr;}}
+
+  .card{
+    border:1px solid var(--line);
+    background:linear-gradient(180deg,var(--surface),var(--bg-2));
+    border-radius:4px;padding:26px 26px 24px;
+    position:relative;overflow:hidden;
+    transition:border-color .25s,transform .25s;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+    background:var(--cyan);opacity:0;transition:opacity .25s;
+  }
+  .card:hover{border-color:var(--line-bright);transform:translateY(-3px);}
+  .card:hover::before{opacity:1;}
+  .card.alert::before{background:var(--amber);}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;gap:12px;}
+  .card-code{font-family:var(--mono);font-size:11.5px;letter-spacing:0.14em;color:var(--cyan);}
+  .card.alert .card-code{color:var(--amber);}
+  .card-ic{color:var(--faint);flex:0 0 auto;}
+  .card h3{font-family:var(--display);font-weight:600;font-size:21px;letter-spacing:-0.01em;margin-bottom:9px;}
+  .card .desc{color:var(--muted);font-size:14.5px;margin-bottom:18px;line-height:1.6;}
+  .card ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+  .card li{font-size:14px;color:var(--text);padding-left:18px;position:relative;line-height:1.5;}
+  .card li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;background:var(--cyan);border-radius:50%;}
+  .card.alert li::before{background:var(--amber);}
+  .tags{display:flex;flex-wrap:wrap;gap:7px;}
+  .tag-chip{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.03em;color:var(--muted);
+    padding:4px 9px;border:1px solid var(--line);border-radius:2px;background:var(--bg-2);
+  }
+
+  /* ---------- approach ---------- */
+  .approach{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .appr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:46px;border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .appr-cell{padding:30px 28px;border-right:1px solid var(--line);}
+  .appr-cell:last-child{border-right:none;}
+  .appr-cell .n{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:0.12em;margin-bottom:14px;}
+  .appr-cell h4{font-family:var(--display);font-weight:600;font-size:18px;margin-bottom:9px;letter-spacing:-0.01em;}
+  .appr-cell p{color:var(--muted);font-size:14px;line-height:1.6;}
+  @media (max-width:760px){
+    .appr-grid{grid-template-columns:1fr;}
+    .appr-cell{border-right:none;border-bottom:1px solid var(--line);}
+    .appr-cell:last-child{border-bottom:none;}
+  }
+
+  /* ---------- contact ---------- */
+  .contact{text-align:center;padding:104px 0;}
+  .contact .eyebrow{margin-bottom:22px;display:inline-block;}
+  .contact h2{font-family:var(--display);font-weight:600;font-size:clamp(30px,5vw,52px);letter-spacing:-0.02em;line-height:1.08;max-width:18ch;margin:0 auto;}
+  .contact p{color:var(--muted);margin-top:22px;max-width:52ch;margin-left:auto;margin-right:auto;font-size:16px;}
+  .contact-row{margin-top:40px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+  .contact-meta{margin-top:46px;display:inline-flex;gap:0;border:1px solid var(--line);border-radius:3px;overflow:hidden;font-family:var(--mono);font-size:13px;flex-wrap:wrap;}
+  .contact-meta .m{padding:14px 22px;border-right:1px solid var(--line);color:var(--muted);}
+  .contact-meta .m:last-child{border-right:none;}
+  .contact-meta .m b{color:var(--text);font-weight:500;}
+  @media (max-width:560px){.contact-meta .m{border-right:none;border-bottom:1px solid var(--line);width:100%;text-align:center;}.contact-meta .m:last-child{border-bottom:none;}}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:30px 0;}
+  .foot-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:0.05em;}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand"><span class="pulse"></span><b>ENGINEERED&nbsp;SYSTEMS</b><span>// infra · software</span></div>
+    <nav class="links">
+      <a href="#services">Services</a>
+      <a href="#approach">Approach</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Full-stack infrastructure engineering</span>
+      <h1>From structured cabling to <span class="em">cloud-native microservices.</span></h1>
+      <p class="lede">A single engineering source for the whole stack — the physical layer that carries the signal, the automation that runs it, and the software that lives on top. Built to production standards, hardened in a regulated environment, and delivered as clean, versioned work.</p>
+      <div class="hero-cta">
+        <a class="btn solid" href="#services">View services <span class="arrow">→</span></a>
+        <a class="btn" href="#contact">Start a project <span class="arrow">→</span></a>
+      </div>
+
+      <div class="telemetry reveal">
+        <div class="cell"><span class="k">Stack coverage</span><span class="v">L1 → L7</span></div>
+        <div class="cell"><span class="k">Disciplines</span><span class="v">6 <span class="dot">●</span></span></div>
+        <div class="cell"><span class="k">Delivery</span><span class="v">Versioned</span></div>
+        <div class="cell"><span class="k">Availability</span><span class="v">Open <span class="dot">●</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="num">01</span>
+        <h2>Services</h2>
+      </div>
+      <p class="sec-sub">Six disciplines that read as one continuous stack — every layer from the copper in the wall to the container in the cluster.</p>
+
+      <div class="stack">
+
+        <!-- APPLICATION LAYER -->
+        <div class="layer-group reveal">
+          <div class="layer-label">
+            <span class="tag">Application Layer</span>
+            <span class="rule"></span>
+            <span class="lnum">LAYER&nbsp;03</span>
+          </div>
+          <div class="cards">
+            <div class="card">
+              <div class="card-top">
+                <span class="card-code">SVC-01</span>
+                <svg class="card-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+              </div>
+              <h3>Microservice Application Development</h3>
+              <p class="desc">Containerized services and modern web applications, architected to run reliably in production rather than just demo on a laptop.</p>
+              <ul>
+                <li>Python / Flask back-ends and React (Vite) front-ends</li>
+                <li>REST API design and multi-service architectures</li>
+                <li>Caching, object storage, and data-ingestion pipelines</li>
+                <li>Containerized and deployed on Kubernetes / OpenShift</li>
+                <li>GitOps delivery with clean, versioned releases</li>
+              </ul>
+              <div class="tags">
+                <span class="tag-chip">Python</span><span class="tag-chip">Flask</span><span class="tag-chip">React</span><span class="tag-chip">REST</span><span class="tag-chip">Docker</span><span class="tag-chip">Kubernetes</span><span class="tag-chip">OpenShift</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OPERATIONS LAYER -->
+        <div class="layer-group reveal">
+          <div class="layer-label">
+            <span class="tag">Operations Layer</span>
+            <span class="rule"></span>
+            <span class="lnum">LAYER&nbsp;02</span>
+          </div>
+          <div class="cards grid-2">
+            <div class="card">
+              <div class="card-top">
+                <span class="card-code">SVC-02</span>
+                <svg class="card-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.5 2.5M16.5 16.5L19 19M19 5l-2.5 2.5M7.5 16.5L5 19"/><circle cx="12" cy="12" r="3.2"/></svg>
+              </div>
+              <h3>Automation</h3>
+              <p class="desc">Removing the manual, repetitive work that quietly drains teams — provisioning, configuration, and delivery that run themselves.</p>
+              <ul>
+                <li>Configuration management &amp; provisioning with Ansible</li>
+                <li>CI/CD pipelines and GitOps workflows</li>
+                <li>Cross-system API integration pipelines</li>
+                <li>Infrastructure-as-code, repeatable environments</li>
+              </ul>
+              <div class="tags">
+                <span class="tag-chip">Ansible</span><span class="tag-chip">CI/CD</span><span class="tag-chip">GitOps</span><span class="tag-chip">Python</span><span class="tag-chip">PowerShell</span><span class="tag-chip">IaC</span>
+              </div>
+            </div>
+            <div class="card alert">
+              <div class="card-top">
+                <span class="card-code">SVC-03</span>
+                <svg class="card-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h3l2.5 7L13 4l2.5 9H21"/></svg>
+              </div>
+              <h3>Alerting &amp; System Monitoring</h3>
+              <p class="desc">Full visibility into what your systems are doing, with alerts that fire before users ever notice a problem.</p>
+              <ul>
+                <li>Multi-cluster observability platforms</li>
+                <li>Centralized log ingestion — hot &amp; cold tiers</li>
+                <li>Dashboards in Grafana, Elasticsearch &amp; SquaredUp</li>
+                <li>Custom alert rules and health / SLA reporting</li>
+                <li>Root-cause analysis tooling</li>
+              </ul>
+              <div class="tags">
+                <span class="tag-chip">Grafana</span><span class="tag-chip">Elasticsearch</span><span class="tag-chip">Observability</span><span class="tag-chip">Logging</span><span class="tag-chip">Alerting</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHYSICAL LAYER -->
+        <div class="layer-group reveal">
+          <div class="layer-label">
+            <span class="tag">Physical Layer</span>
+            <span class="rule"></span>
+            <span class="lnum">LAYER&nbsp;01</span>
+          </div>
+          <div class="cards grid-2">
+            <div class="card">
+              <div class="card-top">
+                <span class="card-code">SVC-04</span>
+                <svg class="card-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="4" rx="1"/><rect x="3" y="10" width="18" height="4" rx="1"/><rect x="3" y="16" width="18" height="4" rx="1"/><path d="M7 6h.01M7 12h.01M7 18h.01"/></svg>
+              </div>
+              <h3>Low-Voltage Systems</h3>
+              <p class="desc">The structured foundation every reliable network sits on — done right the first time so nothing above it has to compensate.</p>
+              <ul>
+                <li>Structured cabling design and installation</li>
+                <li>Network infrastructure: L2/L3 switching &amp; patching</li>
+                <li>Rack layout, power, and cable management</li>
+                <li>Firewall and network-edge configuration</li>
+              </ul>
+              <div class="tags">
+                <span class="tag-chip">Structured cabling</span><span class="tag-chip">L2/L3</span><span class="tag-chip">Switching</span><span class="tag-chip">Firewalls</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-top">
+                <span class="card-code">SVC-05</span>
+                <svg class="card-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 7l13-3 1 4-13 3z"/><circle cx="9" cy="9" r="2"/><path d="M16 8l5-2v12l-5-2M2 11v8h14v-6"/></svg>
+              </div>
+              <h3>Camera &amp; Surveillance Systems</h3>
+              <p class="desc">IP surveillance designed, networked, and monitored end to end — from the lens to the storage retention policy.</p>
+              <ul>
+                <li>IP / CCTV camera deployment</li>
+                <li>NVR / VMS configuration</li>
+                <li>PoE network design and bandwidth planning</li>
+                <li>Remote monitoring and retention setup</li>
+              </ul>
+              <div class="tags">
+                <span class="tag-chip">IP CCTV</span><span class="tag-chip">NVR</span><span class="tag-chip">PoE</span><span class="tag-chip">VMS</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-top">
+                <span class="card-code">SVC-06</span>
+                <svg class="card-ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>
+              </div>
+              <h3>Telephony</h3>
+              <p class="desc">Voice infrastructure that scales with the organization and integrates cleanly with the network already in place.</p>
+              <ul>
+                <li>VoIP / IP telephony deployment</li>
+                <li>PBX configuration and SIP trunking</li>
+                <li>Extension and call-routing setup</li>
+                <li>Integration with existing network infrastructure</li>
+              </ul>
+              <div class="tags">
+                <span class="tag-chip">VoIP</span><span class="tag-chip">SIP</span><span class="tag-chip">PBX</span><span class="tag-chip">IP Telephony</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section id="approach" class="approach">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="num">02</span>
+        <h2>Why this stack</h2>
+      </div>
+      <p class="sec-sub">Most providers cover one band of the spectrum and hand off the rest. The advantage here is that the layers were learned in order — and they stay accountable to each other.</p>
+
+      <div class="appr-grid reveal">
+        <div class="appr-cell">
+          <div class="n">/ 01</div>
+          <h4>One source, full stack</h4>
+          <p>The same engineer who runs the cabling understands the microservice that depends on it. No finger-pointing between vendors when a problem crosses layers.</p>
+        </div>
+        <div class="appr-cell">
+          <div class="n">/ 02</div>
+          <h4>Production-grade by default</h4>
+          <p>Experience comes from a regulated, high-uptime environment. Work is built to be observable, recoverable, and auditable — not just functional.</p>
+        </div>
+        <div class="appr-cell">
+          <div class="n">/ 03</div>
+          <h4>Clean, versioned delivery</h4>
+          <p>Documented, repeatable, and handed over in clearly versioned releases. You get something a team can actually maintain after the engagement ends.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <span class="eyebrow">Available for freelance &amp; contract work</span>
+      <h2>Let's scope your next system.</h2>
+      <p>Whether it's a single discipline or the whole stack — from a surveillance rollout to a containerized platform — send the brief and let's talk.</p>
+      <div class="contact-row">
+        <a class="btn solid" href="mailto:your-email@example.com">Send a brief <span class="arrow">→</span></a>
+        <a class="btn" href="#services">Review services <span class="arrow">→</span></a>
+      </div>
+      <div class="contact-meta">
+        <span class="m">EMAIL&nbsp;&nbsp;<b>your-email@example.com</b></span>
+        <span class="m">PHONE&nbsp;&nbsp;<b>+965 0000 0000</b></span>
+        <span class="m">BASED&nbsp;&nbsp;<b>Kuwait · Remote-ready</b></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span>ENGINEERED SYSTEMS — INFRASTRUCTURE &amp; SOFTWARE SERVICES</span>
+    <span>L1 → L7 · SIX DISCIPLINES</span>
+  </div>
+</footer>
+
+<script>
+  // scroll reveal
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if(reduce || !('IntersectionObserver' in window)){
+      els.forEach(function(e){e.classList.add('in');});
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}
+      });
+    },{threshold:0.12});
+    els.forEach(function(e){io.observe(e);});
+  })();
+</script>
+</body>
+</html>
